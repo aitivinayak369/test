@@ -12,9 +12,10 @@ var user=new User({email:req.body.email})
 user.save().then((doc)=>{
     res.send(doc);
 },(e)=>{
-    res.status(400).send(e);
+    res.status(400).send(e);  
 });
  });
  app.listen(3000,()=>{
      console.log(`listening to port 3000` );
  })
+ module.exports={app};
