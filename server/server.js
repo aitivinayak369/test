@@ -1,7 +1,7 @@
 var express=require('express');
 var bodyparser=require('body-parser');
-var {mongoose}=require('./db/mongoose.js');
 
+var {mongoose}=require('./db/mongoose.js');
 var {Todo}=require('./models/todos.js');
 var {User}=require('./models/users.js');
  var app=express();
@@ -15,6 +15,11 @@ user.save().then((doc)=>{
     res.status(400).send(e);  
 });
  });
+ app.get('/todos',(req,res)=>{
+     User.find().then((docs)=>{
+         res.send({docs});
+     },(e)=>{res.status(400).send(e)})
+ })
  app.listen(3000,()=>{
      console.log(`listening to port 3000` );
  })

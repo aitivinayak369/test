@@ -1,14 +1,15 @@
 const expect=require('expect');
 const request=require('supertest');
-const {app}=require('./../server.js');
+
 const {User}=require('./../models/users');
 beforeEach((done)=>{
     User.remove({}).then(()=>done());
     
-});
+});const {app}=require('./../server');
 describe('POST /todos',()=>{
 it('it shoul create a new user',(done)=>{
     var email='aitivinayak123@gmail.com';
+    
 request(app)
 .post('/todos')
 .send({email})
