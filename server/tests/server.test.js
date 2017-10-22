@@ -1,8 +1,9 @@
 const expect=require('expect');
 const request=require('supertest');
+const {ObjectID}=require('mongodb')
 const {app}=require('./../server');
 const {User}=require('./../models/users');
-const todos=[{email:'first test todo'},{email:'second test todo'}];
+const todos=[{_id:new ObjectID(),email:'first test todo'},{_id:new ObjectID(),email:'second test todo'}];
 
 beforeEach((done)=>{
     User.remove({}).then(()=>{
@@ -47,23 +48,22 @@ request(app)
         return done(err);
     }
 });
-User.find().then((todos)=>{
+User.find().then((todos)=>{                     
     expect(todos.length).toBe(2)
-    
     done();
 }).catch((e)=>done(e));
 
 
 });
 });
-describe('GET /todos',(done)=>{
+describe('GET /todos',()=>{
     it('should request data',(done)=>{
        request(app)
        
        .get('/todos')
-       .expect(500)
+       .expect(200)
        .expect((res)=>{
-           expect(res.body.docs.length).toBe(7);
+           expect(res.body.docs.length).toBe(2);
        })
     .end((err,res)=>{
         if(err)
@@ -73,9 +73,25 @@ describe('GET /todos',(done)=>{
         
         
     });
-    User.find().then((docs)=>{
-        expect(docs.length).toBe(4)
-        done();
-    });
-    });
+User.find().then((todos)=>{
+    expect(todos.length).toBe(4)
+    expect(todos[0].email).toBe('first test todo');
+   
+})
+done();
+
+
+});
+});
+describe('GET /todos/:id',()=>{
+it('should dive information according to id',(done)=>{
+    request(app)
+    .get('/todos/'+todos[0]._id)
+    .expect(200)
+    .expect((res)=>{
+        expect(res.body.doc.email).toBe(todos[0].email)
+    })
+    .end(done)
+});
+
 });

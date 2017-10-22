@@ -1,6 +1,7 @@
 var express=require('express');
 var bodyparser=require('body-parser');
 
+const {ObjectID}=require('mongodb')
 var {mongoose}=require('./db/mongoose.js');
 var {Todo}=require('./models/todos.js');
 var {User}=require('./models/users.js');
@@ -21,6 +22,22 @@ user.save().then((doc)=>{
      res.send({docs});
      },(e)=>{res.status(400).send(e)})
  })
+ app.get('/todos/:id',(req,res)=>{
+    var id=req.params.id;
+    if(!ObjectID.isValid(id))
+    {
+        return res.status(404).send();
+    }
+    User.findById(id).then((doc)=>{
+        if(!doc)
+        {
+            return res.status(404).send();
+        }
+        res.send({doc})
+    }).catch((e)=>{
+        res.status(400).send();
+    });
+ });
  app.listen(3000,()=>{
      console.log(`listening to port 3000` );
  })
