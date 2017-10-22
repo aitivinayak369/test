@@ -24,3 +24,24 @@ User.findById(id).then((doc)=>{
 }).catch((e)=>{
     console.log(e)
 });
+
+
+
+
+
+
+
+
+User.find().then((docs)=>{
+    expect(docs.length).toBe(4);
+    done();
+})         
+   
+
+User.find().then((todos)=>{
+    expect(todos.length).toBe(3)
+    expect(todos[0].email).toBe('first test todo');
+    done();
+}).catch((e)=>done(e));
+
+

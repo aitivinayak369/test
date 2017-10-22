@@ -6,6 +6,7 @@ var {mongoose}=require('./db/mongoose.js');
 var {Todo}=require('./models/todos.js');
 var {User}=require('./models/users.js');
  var app=express();
+ const port=process.env.PORT||3000;
  app.use(bodyparser.json());
  app.post('/todos',(req,res)=>{
      console.log(req.body.email);
@@ -38,7 +39,7 @@ user.save().then((doc)=>{
         res.status(400).send();
     });
  });
- app.listen(3000,()=>{
-     console.log(`listening to port 3000` );
+ app.listen(port,()=>{
+     console.log(`listening to port ${port}` );
  })
  module.exports={app};
