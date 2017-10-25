@@ -1,6 +1,6 @@
 var express=require('express');
 var bodyparser=require('body-parser');
-
+const _=require('lodash');
 const {ObjectID}=require('mongodb')
 var {mongoose}=require('./db/mongoose.js');
 var {Todo}=require('./models/todos.js');
@@ -20,7 +20,7 @@ user.save().then((doc)=>{
  app.get('/todos',(req,res)=>{
      User.find().then((docs)=>{
 
-     res.send({docs});
+     res.send(docs);
      },(e)=>{res.status(400).send(e)})
  })
  app.get('/todos/:id',(req,res)=>{
@@ -39,6 +39,24 @@ user.save().then((doc)=>{
         res.status(400).send();
     });
  });
+ app.delete('/todos/:id',(req,res)=>{
+User.findByIdAndRemove(req.params.id).then((doc)=>{
+    if(!doc)
+    {
+        return res.status(404).send();
+    }
+    res.send({doc});
+})
+ })
+ app.patch('/todos/:id',(req,res)=>{
+     var body=_.pick(req.body,['email']);
+     User.findByIdAndUpdate(req.params.id,{$set:{email:'updated'}},{new:true}).then((doc)=>{
+         res.send(`updated is:${doc}`);
+     }).catch((e)=>{
+         res.send(400);
+     })
+    
+ })
  app.listen(port,()=>{
      console.log(`listening to port ${port}` );
  })
