@@ -20,7 +20,7 @@ user.save().then((doc)=>{
  app.get('/todos',(req,res)=>{
      User.find().then((docs)=>{
 
-     res.send(docs);
+     res.send({docs});
      },(e)=>{res.status(400).send(e)})
  })
  app.get('/todos/:id',(req,res)=>{
